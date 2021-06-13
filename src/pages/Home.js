@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box } from "@material-ui/core";
 import PostCard from "../components/PostCard";
 import firebase from "../utils/firebase";

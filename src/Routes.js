@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter as Switch, Route } from "react-router-dom";
 import AuthGaurd from "./gaurds/AuthGaurd";
 import MainLayout from "./layouts/MainLayout";
