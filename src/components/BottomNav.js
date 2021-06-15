@@ -7,6 +7,7 @@ import RestoreIcon from "@material-ui/icons/Restore";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useHistory, useLocation } from "react-router";
 
 const useStyles = makeStyles({
@@ -46,7 +47,7 @@ export default function BottomNav() {
       <BottomNavigationAction
         label="add"
         value="/add"
-        icon={<LocationOnIcon />}
+        icon={<AddCircleIcon />}
       />
       <BottomNavigationAction
         label="favourite"
