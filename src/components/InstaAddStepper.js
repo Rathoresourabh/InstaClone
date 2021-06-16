@@ -1,17 +1,16 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Uploader from './Uploader';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import StepContent from "@material-ui/core/StepContent";
+import Uploader from "./Uploader";
+import PostDescription from "./PostDescription";
+import VerifyPostInfo from "./VerifyPostInfo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
   },
   button: {
     marginTop: theme.spacing(1),
@@ -25,59 +24,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function InstaAddStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = [
-    ['Upload Image' ,Uploader], 
-    ['Add caption' ,Uploader], 
-    ['Post', Uploader],
+    ["Upload Image", Uploader],
+    ["Add Details", PostDescription],
+    ["Submit", VerifyPostInfo],
   ];
 
-
   let handleNext = () => {
-      setActiveStep((step) => {
-          if(step < steps.length){
-              return step + 1;
-          }
-      });
+    setActiveStep((step) => {
+      if (step < steps.length) {
+        return step + 1;
+      }
+    });
   };
-
-  
-
-  
 
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map(([label, Component] , index) => (
+        {steps.map(([label, Component], index) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
             <StepContent>
               <div className={classes.actionsContainer}>
                 <div>
-                  <Component/>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
+                  <Component setActiveStep={setActiveStep} />
                 </div>
               </div>
             </StepContent>
           </Step>
         ))}
       </Stepper>
-      {activeStep === steps.length && (
-        <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>Your Post is Uploaded</Typography>
-        
-        </Paper>
-      )}
     </div>
   );
 }

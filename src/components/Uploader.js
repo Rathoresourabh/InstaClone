@@ -1,13 +1,16 @@
-import React ,{useState} from 'react'
-import { Box ,Button } from "@material-ui/core";
-
-import ImageUploader from "react-images-upload"
+import React, { useState ,useContext } from "react";
+import { Box, Button } from "@material-ui/core";
+import ImageUploader from "react-images-upload";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import axios from '../utils/axios'
+import axios from "../utils/axios";
+import {PostContext} from "../pages/Add"
 
-export default function Uploader() {
-  let [picture,setPicture] = useState();
+export default function Uploader({ setActiveStep }) {
+  let [picture, setPicture] = useState();
+  let [content, setContent] = useState();
+  let { postData, setPostData } = useContext(PostContext);
+
   let getCroppedImg = (image, crop, fileName) => {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
@@ -30,24 +33,18 @@ export default function Uploader() {
     var dataURL = canvas.toDataURL("image/png");
 
     let content = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    
-    axios
-      .post("http://localhost:5000/images/", {
-        content,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
+    setContent(content);
 
     return new Promise((resolve, reject) => {
       canvas.toBlob(
         (blob) => {
-          blob.name = fileName;
-          resolve(blob);
+          if (blob) {
+            blob.name = fileName;
+            resolve(blob);
+          } else {
+            reject("failed");
+          }
         },
         "image/png",
         1
@@ -63,7 +60,6 @@ export default function Uploader() {
     width: 100,
     height: 100,
   });
-
 
   let onDrop = function (pictures) {
     let pic = pictures[pictures.length - 1];
@@ -93,13 +89,38 @@ export default function Uploader() {
           variant="contained"
           onClick={async function () {
             let img = document.getElementsByClassName("ReactCrop__image")[0];
-            let result = await getCroppedImg(img, crop, "cropped.png");
-             setPicture(URL.createObjectURL(result));
+            getCroppedImg(img, crop, "cropped.png")
+              .then((result) => {
+                setPicture(URL.createObjectURL(result));
+              })
+              .catch(() => {});
           }}
         >
           Crop
         </Button>
       )}
+      <Button
+        onClick={function () {
+          axios
+            .post("/images/", {
+              content,
+            })
+            .then((res) => {
+              let copy = { ...postData };
+              copy.imageId = res.data._id;
+              setPostData(copy);
+              setActiveStep((step) => step + 1);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
+        variant="contained"
+        disabled={!content}
+      >
+        {" "}
+        Next
+      </Button>
     </Box>
   );
 }

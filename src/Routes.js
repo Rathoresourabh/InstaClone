@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Switch, Route } from "react-router-dom";
 import AuthGaurd from "./gaurds/AuthGaurd";
 import MainLayout from "./layouts/MainLayout";
-import Add from "./pages/Add";
+import {Add}from "./pages/Add";
 import Favourites from "./pages/Favourites";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
