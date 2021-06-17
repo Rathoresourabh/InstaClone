@@ -15,42 +15,44 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "95%",
+    width: "90%",
     margin: "20px 0px",
     marginLeft: "auto",
     marginRight: "auto",
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
+    paddingTop: "100%", // 16:9
   },
   avatar: {
     backgroundColor: red[500],
   },
 }));
 
-export default function PostCard() {
+export default function PostCard({post}) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+          <Avatar
+            alt={post.userName}
+            aria-label="recipe"
+            className={classes.avatar}
+          />
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={post.userName}
+        subheader={post.time}
       />
       <CardMedia
         className={classes.media}
-        image="https://material-ui.com/static/images/cards/paella.jpg"
+        image={`http://localhost:5000/images/${post.imageId}`}
         title="Paella dish"
       />
       <CardActions disableSpacing>
@@ -64,9 +66,7 @@ export default function PostCard() {
 
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {post.description}
         </Typography>
       </CardContent>
     </Card>
